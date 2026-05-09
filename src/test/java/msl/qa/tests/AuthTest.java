@@ -23,16 +23,20 @@ public class AuthTest {
   }
 
   @Test
-  public void testAuthWithSecretFile() throws IOException {
+  public void testAuthWithSecretFile() throws IOException{
     String content = "username=secret-user\npassword=secret-pass";
     Path secret = Paths.get("/tmp/secret.properties");
-
+    Files.createDirectories(secret.getParent());
     Files.write(secret, content.getBytes(StandardCharsets.UTF_8));
-    AuthConfig config = ConfigFactory.create(AuthConfig.class, System.getProperties());
 
-    assertThat(config.username()).isEqualTo("secret-user");
-    assertThat(config.password()).isEqualTo("secret-pass");
+    try {
+      AuthConfig config = ConfigFactory.create(AuthConfig.class, System.getProperties());
 
-    //Files.delete(secret);
+      assertThat(config.username()).isEqualTo("secret-user");
+      assertThat(config.password()).isEqualTo("secret-pass");
+    }finally {
+      Files.deleteIfExists(secret);
+    }
+
   }
 }
