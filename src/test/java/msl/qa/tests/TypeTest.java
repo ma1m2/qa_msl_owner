@@ -8,10 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class TypeTest {
 
@@ -47,12 +46,12 @@ public class TypeTest {
     assertThat(config.getEnum()).isEqualTo(Browser.CHROME);
   }
 
-  //@Test
+  @Test
   public void testBytes(){
-    System.setProperty("bytes", "bytes");
+    System.setProperty("bytes", "98,121,116,101,115");
     TypeConfig config = ConfigFactory.create(TypeConfig.class, System.getProperties());
 
-    assertThat(config.getBytes()).containsAnyOf();
+    assertThat(config.getBytes()).containsExactly((byte) 98, (byte) 121, (byte) 116, (byte) 101, (byte) 115);
   }
 
   @Test
@@ -71,12 +70,21 @@ public class TypeTest {
     assertThat(config.getFile()).isEqualTo(new File(".gitignore"));
   }
 
-  //@Test
+  @Test
   public void testPath(){
     System.setProperty("path", ".gitignore");
     TypeConfig config = ConfigFactory.create(TypeConfig.class, System.getProperties());
 
-    assertThat(config.getPath()).isEqualTo(Paths.get(".gitignore"));
+    assertThatThrownBy(config::getPath)
+        .hasMessageContaining("Cannot convert '.gitignore' to java.nio.file.Path");
+  }
+
+  @Test
+  public void testList(){
+    System.setProperty("list", "1, 2, 3, 4");
+    TypeConfig config = ConfigFactory.create(TypeConfig.class, System.getProperties());
+
+    assertThat(config.getList()).containsExactly(1, 2, 3, 4);
   }
 
 }
