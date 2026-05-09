@@ -87,4 +87,12 @@ public class TypeTest {
     assertThat(config.getList()).containsExactly(1, 2, 3, 4);
   }
 
+  @Test
+  public void testListBrowsers(){
+    System.setProperty("listBrowsers", "CHROME,FIREFOX");
+    TypeConfig config = ConfigFactory.create(TypeConfig.class, System.getProperties());
+
+    assertThat(config.getListBrowsers()).containsExactly(Browser.CHROME, Browser.FIREFOX);
+  }
+
 }

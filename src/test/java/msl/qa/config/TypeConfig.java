@@ -35,4 +35,7 @@ public interface TypeConfig extends Config {
 
   @Key("list")
   List<Integer> getList();
+
+  @Key("listBrowsers")
+  List<Browser> getListBrowsers();
 }
