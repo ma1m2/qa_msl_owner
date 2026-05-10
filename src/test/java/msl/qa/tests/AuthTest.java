@@ -2,6 +2,7 @@ package msl.qa.tests;
 
 import msl.qa.config.AuthConfig;
 import org.aeonbits.owner.ConfigFactory;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class AuthTest {
   }
 
   @Test
+  @DisplayName("Секретный файл на диске C:/tmp")
   public void testAuthWithSecretFile() throws IOException{
     String content = "username=secret-user\npassword=secret-pass";
     Path secret = Paths.get("/tmp/secret.properties");
@@ -37,6 +39,6 @@ public class AuthTest {
     }finally {
       Files.deleteIfExists(secret);
     }
-
   }
+
 }
