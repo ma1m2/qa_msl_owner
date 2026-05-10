@@ -8,23 +8,22 @@ import org.openqa.selenium.WebDriver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WebTests {
-  // One system variable controls run profile: -Dstand=local or -Dstand=remote.
+  // One system variable controls run profile: ./gradlew test -Dstand=local or -Dstand=remote.
   private WebDriver driver;
 
   @Test
-  public void localWebTest(){
-    System.setProperty("stand", System.getProperty("stand", "local"));
+  public void webTest(){
+    ensureStandIsSet();
     driver = new WebDriverProvider().get();
     String title = driver.getTitle();
     assertEquals("GitHub · Change is constant. GitHub keeps you ahead. · GitHub", title);
   }
 
-  @Test
-  public void remoteWebTest(){
-    System.setProperty("stand", System.getProperty("stand", "remote"));
-    driver = new WebDriverProvider().get();
-    String title = driver.getTitle();
-    assertEquals("GitHub · Change is constant. GitHub keeps you ahead. · GitHub", title);
+  private void ensureStandIsSet() {
+    String stand = System.getProperty("stand");
+    if (stand == null || stand.isBlank()) {
+      System.setProperty("stand", "local");
+    }
   }
 
   @AfterEach
